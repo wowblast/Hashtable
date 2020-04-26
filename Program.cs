@@ -27,7 +27,7 @@ namespace HashTableProject
                 tablaNombre[i] = null;
             }
 
-            InsertarPacientePorCI("Pepega Pls", 3333, "Internado", "Martes 4/4/2020");
+           /* InsertarPacientePorCI("Pepega Pls", 3333, "Internado", "Martes 4/4/2020");
             InsertarPacientePorCI("Pepega Shower", 2566, "Internado", "Jueves 2/5/2020");
             InsertarPacientePorCI("Pepega Driving", 4261, "Internado", "Jueves 2/5/2020");
             InsertarPacientePorCI("Wide Peepo Sad", 21, "Internado", "Jueves 2/5/2020");
@@ -36,17 +36,26 @@ namespace HashTableProject
             InsertarPacientePorCI("Pepe Laugh", 1500, "Internado", "Jueves 2/5/2020");
             InsertarPacientePorCI("XQC L", 2991, "Internado", "Jueves 2/5/2020");
 
+            InsertarPacientePorNombre("Pepega Pls", 3333, "Internado", "Martes 4/4/2020");
+            InsertarPacientePorNombre("Pepega Shower", 2566, "Internado", "Jueves 2/5/2020");
+            InsertarPacientePorNombre("Pepega Driving", 4261, "Internado", "Jueves 2/5/2020");
+            InsertarPacientePorNombre("Wide Peepo Sad", 21, "Internado", "Jueves 2/5/2020");
+            InsertarPacientePorNombre("Pepe Hands", 2118, "Internado", "Jueves 2/5/2020");
+            InsertarPacientePorNombre("Monka Eyes", 1792, "Internado", "Miercoles 30/12/2020");
+            InsertarPacientePorNombre("Pepe Laugh", 1500, "Internado", "Jueves 2/5/2020");
+            InsertarPacientePorNombre("XQC L", 2991, "Internado", "Jueves 2/5/2020");*/
 
 
-            MostrarPorCI();
+
+            // MostrarPorCI();
 
             //EliminarPacientePorNombre("Pepega Pls");
             //MostrarPorNombre();
 
 
-           // SearchByCI(17);
+            // SearchByCI(17);
 
-
+            RunSystem();
             Console.ReadLine();
 
            
@@ -109,10 +118,21 @@ namespace HashTableProject
                                 BuscarPorCI(newCI);
                                 sw.Stop();
                                 Console.WriteLine(" tomó {0:N0}", sw.ElapsedTicks);
-                                sw.Reset(); break;
+                                sw.Reset();
+                                sw.Start();
+                                BuscarPorCI(newCI);
+                                sw.Stop();
+                                Console.WriteLine(" tomó {0:N0}", sw.ElapsedTicks);
+                                sw.Reset();
+                                break;
                             case 2:
                                 Console.WriteLine("Ingrese Nombre completo a buscar");
                                  string nombreCompleto =Console.ReadLine();
+                                sw.Start();
+                                BuscarporNombreCompleto(nombreCompleto);
+                                sw.Stop();
+                                Console.WriteLine(" tomó {0:N0}", sw.ElapsedTicks);
+                                sw.Reset();
                                 sw.Start();
                                 BuscarporNombreCompleto(nombreCompleto);
                                 sw.Stop();
@@ -239,13 +259,28 @@ namespace HashTableProject
         public static void BuscarporNombreCompleto(string name)
         {
             int indice = FuncionName(name);
-            BusquedaSecuencial(name, tablaNombre[indice]);
+            if (tablaNombre[indice] == null)
+            {
+                Console.WriteLine("Paciente no encontrado");
+            }
+            else
+            {
+                BusquedaSecuencial(name, tablaNombre[indice]);
+            }
 
         }
         public static void BuscarPorCI(int ci)
         {
-           int indice = FuncionCI(ci);                     
-           BusquedaBinaria(ci, 0, getLength(tablaCI[indice]) -1, tablaCI[indice]);            
+           int indice = FuncionCI(ci);
+           
+            if (tablaCI[indice] == null)
+            {
+                Console.WriteLine("Paciente no encontrado");
+            }
+            else
+            {
+                BusquedaBinaria(ci, 0, getLength(tablaCI[indice]) - 1, tablaCI[indice]);
+            }
 
         }
        
@@ -256,17 +291,19 @@ namespace HashTableProject
             medio = (int)Math.Floor(((izq + der) * 1.0 / 2.0));
             if (der - izq > 1)
             {
-                int CImedio = getPatient(patient, medio).CI;
-                if (CImedio == target)
+                Patient CImedio = getPatient(patient, medio);
+                if (CImedio.CI == target)
                 {
-                    Console.WriteLine("numero encontrado {0} en pos {1}", CImedio, medio);
+                    Console.WriteLine("\t Paciente encontrado en  {0} : [{1}, {2}, {3}, {4}]", izq, CImedio.NombreCompleto, CImedio.CI,
+                                                   CImedio.TipoPaciente, CImedio.FechaIngreso);
+
 
                 }
-                else if (CImedio < target)
+                else if (CImedio.CI < target)
                 {
                     BusquedaBinaria( target, medio + 1, der,patient);
                 }
-                else if (CImedio > target)
+                else if (CImedio.CI > target)
                 {
                     BusquedaBinaria( target, izq, medio - 1,patient);
                 }
@@ -277,13 +314,11 @@ namespace HashTableProject
                 Patient CIder = getPatient(patient, der);
                 if (CIizq.CI == target)
                 {
-                    Console.WriteLine("numero encontrado {0} en pos {1}",CIizq, izq);
                     Console.WriteLine("\t Paciente encontrado en  {0} : [{1}, {2}, {3}, {4}]", izq, CIizq.NombreCompleto, CIizq.CI,
                            CIizq.TipoPaciente, CIizq.FechaIngreso);
                 }
                 else if (CIder.CI== target)
                 {
-                    Console.WriteLine("numero encontrado {0} en pos {1}", CIder, der);
                     Console.WriteLine("\t Paciente encontrado en  {0} : [{1}, {2}, {3}, {4}]", der, CIder.NombreCompleto, CIder.CI,
                            CIder.TipoPaciente, CIder.FechaIngreso);
 
