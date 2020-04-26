@@ -6,60 +6,45 @@ namespace HashTableProject
     class Program
 	{
         private static Patient[] tablaCI;
-        private static Patient[] colasCI;
         private static Patient[] tablaNombre;
-        private static Patient[] colasNombre;
         private static int cantidad = 23;
-
+        private static string delName;
+        private static int delCI;
 
 		static void Main(string[] args)
 		{
             tablaCI = new Patient[cantidad];
-            colasCI = new Patient[cantidad];
             for (int i = 0; i < cantidad; i++)
             {
                 tablaCI[i] = null;
             }
             tablaNombre = new Patient[cantidad];
-            colasNombre = new Patient[cantidad];
+
             for (int i = 0; i < cantidad; i++)
             {
                 tablaNombre[i] = null;
             }
 
-           /* InsertarPacientePorCI("Pepega Pls", 3333, "Internado", "Martes 4/4/2020");
+            
+            InsertarPacientePorCI("Pepega Pls", 3333, "Internado", "Martes 4/4/2020");
             InsertarPacientePorCI("Pepega Shower", 2566, "Internado", "Jueves 2/5/2020");
-            InsertarPacientePorCI("Pepega Driving", 4261, "Internado", "Jueves 2/5/2020");
+            InsertarPacientePorCI("Pepega Driving", 4261, "Ambulatorio", "Viernes 24/9/2020");
             InsertarPacientePorCI("Wide Peepo Sad", 21, "Internado", "Jueves 2/5/2020");
             InsertarPacientePorCI("Pepe Hands", 2118, "Internado", "Jueves 2/5/2020");
-            InsertarPacientePorCI("Monka Eyes", 1792, "Internado", "Miercoles 30/12/2020");
-            InsertarPacientePorCI("Pepe Laugh", 1500, "Internado", "Jueves 2/5/2020");
+            InsertarPacientePorCI("Monka Eyes", 1792, "Ambulatorio", "Miercoles 30/12/2020");
+            InsertarPacientePorCI("Pepe Laugh", 1500, "Ambulatorio", "Domingo 28/2/2020");
             InsertarPacientePorCI("XQC L", 2991, "Internado", "Jueves 2/5/2020");
 
             InsertarPacientePorNombre("Pepega Pls", 3333, "Internado", "Martes 4/4/2020");
             InsertarPacientePorNombre("Pepega Shower", 2566, "Internado", "Jueves 2/5/2020");
-            InsertarPacientePorNombre("Pepega Driving", 4261, "Internado", "Jueves 2/5/2020");
+            InsertarPacientePorNombre("Pepega Driving", 4261, "Ambulatorio", "Viernes 24/9/2020");
             InsertarPacientePorNombre("Wide Peepo Sad", 21, "Internado", "Jueves 2/5/2020");
             InsertarPacientePorNombre("Pepe Hands", 2118, "Internado", "Jueves 2/5/2020");
-            InsertarPacientePorNombre("Monka Eyes", 1792, "Internado", "Miercoles 30/12/2020");
-            InsertarPacientePorNombre("Pepe Laugh", 1500, "Internado", "Jueves 2/5/2020");
-            InsertarPacientePorNombre("XQC L", 2991, "Internado", "Jueves 2/5/2020");*/
-
-
-
-            // MostrarPorCI();
-
-            //EliminarPacientePorNombre("Pepega Pls");
-            //MostrarPorNombre();
-
-
-            // SearchByCI(17);
-
+            InsertarPacientePorNombre("Monka Eyes", 1792, "Ambulatorio", "Miercoles 30/12/2020");
+            InsertarPacientePorNombre("Pepe Laugh", 1500, "Ambulatorio", "Domingo 28/2/2020");
+            InsertarPacientePorNombre("XQC L", 2991, "Internado", "Jueves 2/5/2020");
+            
             RunSystem();
-            Console.ReadLine();
-
-           
-
         }
 
         public static void RunSystem()
@@ -145,21 +130,36 @@ namespace HashTableProject
 
                         break;
                     case 3:
-                        Console.WriteLine("Ingresar Nombre Completo ");
-                        string nombre = Console.ReadLine();
-                        Console.WriteLine("Ingresar CI ");
-                        int ci = int.Parse(Console.ReadLine());
-                        /// borrar en ambas tablas
-                        /// 
-                        ///
+                        Console.WriteLine("Método de eliminación");
+                        Console.WriteLine("1.- Eliminar por CI");
+                        Console.WriteLine("2.- Eliminar por Nombre completo");
+                        int tipoEliminación = int.Parse(Console.ReadLine());
+                        switch (tipoEliminación)
+                        {
+                            case 1:                                
+                                Console.WriteLine("Ingresar CI ");
+                                int ci = int.Parse(Console.ReadLine());
+                                BuscarPorCI(ci);
+                                EliminarPacientePorCI(delCI);
+                                EliminarPacientePorNombre(delName);
+                                break;
+                            case 2:
+                                Console.WriteLine("Ingresar Nombre Completo ");
+                                string nombre = Console.ReadLine();
+                                BuscarporNombreCompleto(nombre);
+                                EliminarPacientePorCI(delCI);
+                                EliminarPacientePorNombre(delName);
+                                break;
+                        }             
                         break;
                     case 4:
                         /// PONER imprimir 
                         Console.WriteLine("Lista con clave CI");
                         ///metodo
+                        MostrarPorCI();
                         Console.WriteLine("Lista con clave NOmbre completo");
                         //metodo
-
+                        MostrarPorNombre();
                         break;
                     
                     default:
@@ -185,7 +185,6 @@ namespace HashTableProject
                 pat.Next = tablaCI[hash].Next;
                 tablaCI[hash].Next = pat;
                 Patient cola = getLastPatient(tablaCI[hash]);
-                Console.WriteLine("elemento ultimo {0}, {1}", cola.CI, cola.NombreCompleto);
 
                 quickSort(tablaCI[hash], cola);
                 return;
@@ -193,7 +192,6 @@ namespace HashTableProject
             else
             {
                 tablaCI[hash] = pat;
-                colasCI[hash] = pat;
                 return;
             }
             
@@ -247,6 +245,8 @@ namespace HashTableProject
                 {
                     Console.WriteLine("\t Paciente encontrado en  {0} : [{1}, {2}, {3}, {4}]",actualInd, newPatient.NombreCompleto, newPatient.CI,
                            newPatient.TipoPaciente, newPatient.FechaIngreso);
+                    delCI = newPatient.CI;
+                    delName = newPatient.NombreCompleto;
                     IsPatient = true;
                 }
                 actualInd++;
@@ -276,6 +276,8 @@ namespace HashTableProject
             if (tablaCI[indice] == null)
             {
                 Console.WriteLine("Paciente no encontrado");
+                delCI = 0;
+                delName = "";
             }
             else
             {
@@ -316,17 +318,21 @@ namespace HashTableProject
                 {
                     Console.WriteLine("\t Paciente encontrado en  {0} : [{1}, {2}, {3}, {4}]", izq, CIizq.NombreCompleto, CIizq.CI,
                            CIizq.TipoPaciente, CIizq.FechaIngreso);
+                    delCI = CIizq.CI;
+                    delName = CIizq.NombreCompleto;
                 }
                 else if (CIder.CI== target)
                 {
                     Console.WriteLine("\t Paciente encontrado en  {0} : [{1}, {2}, {3}, {4}]", der, CIder.NombreCompleto, CIder.CI,
                            CIder.TipoPaciente, CIder.FechaIngreso);
-
+                    delCI = CIizq.CI;
+                    delName = CIizq.NombreCompleto;
                 }
                 else
                 {
                     Console.WriteLine("Paciente no encontrado");
-
+                    delCI = 0;
+                    delName = "";
                 }
             }
 
@@ -383,7 +389,6 @@ namespace HashTableProject
             else
             {
                 tablaNombre[hash] = pat;
-                colasNombre[hash] = pat;
                 return;
             }
         }
@@ -417,14 +422,12 @@ namespace HashTableProject
                 hash = (hash + 1) % cantidad;
             }
             Patient current = tablaCI[hash];
-            bool removido = false;
             while (current != null)
             {
                 if (current.CI == ci)
                 {
                     tablaCI[hash] = current.Next;
                     Console.WriteLine("Paciente {0}, CI: {1} Eliminado.", current.NombreCompleto, current.CI);
-                    removido = true;
                     break;
                 }
                 if (current.Next != null)
@@ -434,7 +437,6 @@ namespace HashTableProject
                         Console.WriteLine("Paciente {0}, CI: {1} Eliminado.", current.Next.NombreCompleto, current.Next.CI);
                         Patient next = current.Next.Next;
                         current.Next = next;
-                        removido = true;
                         break;
                     }
                     else
@@ -442,10 +444,6 @@ namespace HashTableProject
                         current = current.Next;
                     }
                 }
-            }
-            if (!removido)
-            {
-                Console.WriteLine("Paciente no encontrado.");
             }
         }
         public static void EliminarPacientePorNombre(string nombre)
@@ -456,14 +454,13 @@ namespace HashTableProject
                 hash = (hash + 1) % cantidad;
             }
             Patient current = tablaNombre[hash];
-            bool removido = false;
+
             while (current != null)
             {
                 if (current.NombreCompleto == nombre)
                 {
                     tablaNombre[hash] = current.Next;
                     Console.WriteLine("Paciente {0}, CI: {1} Eliminado.", current.NombreCompleto, current.CI);
-                    removido = true;
                     break;
                 }
                 if (current.Next != null)
@@ -473,7 +470,6 @@ namespace HashTableProject
                         Console.WriteLine("Paciente {0}, CI: {1} Eliminado.", current.Next.NombreCompleto, current.Next.CI);
                         Patient next = current.Next.Next;
                         current.Next = next;
-                        removido = true;
                         break;
                     }
                     else
@@ -481,10 +477,6 @@ namespace HashTableProject
                         current = current.Next;
                     }
                 }
-            }
-            if (!removido)
-            {
-                Console.WriteLine("Paciente no encontrado.");
             }
         }
         public static Patient Partition(Patient left, Patient right) 
