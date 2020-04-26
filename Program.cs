@@ -25,25 +25,13 @@ namespace HashTableProject
                 tablaNombre[i] = null;
             }
 
-            
-            InsertarPacientePorCI("Pepega Pls", 3333, "Internado", "Martes 4/4/2020");
-            InsertarPacientePorCI("Pepega Shower", 2566, "Internado", "Jueves 2/5/2020");
-            InsertarPacientePorCI("Pepega Driving", 4261, "Ambulatorio", "Viernes 24/9/2020");
-            InsertarPacientePorCI("Wide Peepo Sad", 21, "Internado", "Jueves 2/5/2020");
-            InsertarPacientePorCI("Pepe Hands", 2118, "Internado", "Jueves 2/5/2020");
-            InsertarPacientePorCI("Monka Eyes", 1792, "Ambulatorio", "Miercoles 30/12/2020");
-            InsertarPacientePorCI("Pepe Laugh", 1500, "Ambulatorio", "Domingo 28/2/2020");
-            InsertarPacientePorCI("XQC L", 2991, "Internado", "Jueves 2/5/2020");
 
-            InsertarPacientePorNombre("Pepega Pls", 3333, "Internado", "Martes 4/4/2020");
-            InsertarPacientePorNombre("Pepega Shower", 2566, "Internado", "Jueves 2/5/2020");
-            InsertarPacientePorNombre("Pepega Driving", 4261, "Ambulatorio", "Viernes 24/9/2020");
-            InsertarPacientePorNombre("Wide Peepo Sad", 21, "Internado", "Jueves 2/5/2020");
-            InsertarPacientePorNombre("Pepe Hands", 2118, "Internado", "Jueves 2/5/2020");
-            InsertarPacientePorNombre("Monka Eyes", 1792, "Ambulatorio", "Miercoles 30/12/2020");
-            InsertarPacientePorNombre("Pepe Laugh", 1500, "Ambulatorio", "Domingo 28/2/2020");
-            InsertarPacientePorNombre("XQC L", 2991, "Internado", "Jueves 2/5/2020");
-            
+            for (int ind = 1; ind < 50; ind++)
+            {
+                InsertarPacientePorCI("test " + ind, 100 * ind, "Internado", "Martes 4/4/2020");
+                InsertarPacientePorNombre("test " + ind, 100 * ind, "Internado", "Martes 4/4/2020");
+            }
+
             RunSystem();
         }
 
@@ -109,6 +97,7 @@ namespace HashTableProject
                                 sw.Stop();
                                 Console.WriteLine(" tomó {0:N0}", sw.ElapsedTicks);
                                 sw.Reset();
+                               
                                 break;
                             case 2:
                                 Console.WriteLine("Ingrese Nombre completo a buscar");
@@ -123,6 +112,7 @@ namespace HashTableProject
                                 sw.Stop();
                                 Console.WriteLine(" tomó {0:N0}", sw.ElapsedTicks);
                                 sw.Reset();
+                               
                                 break;
                             default:
                                 break;
@@ -231,7 +221,7 @@ namespace HashTableProject
         {
             return name.Length % cantidad;
         }
-        public static void BusquedaSecuencial(string key,Patient p)
+        public static void BusquedaSecuencial(string key,Patient p,int indice)
         {
             Patient keyPatien = getPatient(p, 0);
 
@@ -243,8 +233,9 @@ namespace HashTableProject
                 Patient newPatient = getPatient(p,actualInd);
                 if (newPatient.NombreCompleto  == key)
                 {
-                    Console.WriteLine("\t Paciente encontrado en  {0} : [{1}, {2}, {3}, {4}]",actualInd, newPatient.NombreCompleto, newPatient.CI,
-                           newPatient.TipoPaciente, newPatient.FechaIngreso);
+                    Console.WriteLine("\t Paciente encontrado en  posicion de lista  {5} ,posicion de lista enlazada {0} : [{1}, {2}, {3}, {4}]", actualInd, newPatient.NombreCompleto, newPatient.CI,
+                                                      newPatient.TipoPaciente, newPatient.FechaIngreso, indice);
+
                     delCI = newPatient.CI;
                     delName = newPatient.NombreCompleto;
                     IsPatient = true;
@@ -265,7 +256,7 @@ namespace HashTableProject
             }
             else
             {
-                BusquedaSecuencial(name, tablaNombre[indice]);
+                BusquedaSecuencial(name, tablaNombre[indice],indice);
             }
 
         }
@@ -281,12 +272,12 @@ namespace HashTableProject
             }
             else
             {
-                BusquedaBinaria(ci, 0, getLength(tablaCI[indice]) - 1, tablaCI[indice]);
+                BusquedaBinaria(ci, 0, getLength(tablaCI[indice]) - 1, tablaCI[indice],indice);
             }
 
         }
        
-        public static void BusquedaBinaria( int target, int izq, int der,Patient patient)
+        public static void BusquedaBinaria( int target, int izq, int der,Patient patient,int indice)
         {
             int medio;
 
@@ -296,18 +287,18 @@ namespace HashTableProject
                 Patient CImedio = getPatient(patient, medio);
                 if (CImedio.CI == target)
                 {
-                    Console.WriteLine("\t Paciente encontrado en  {0} : [{1}, {2}, {3}, {4}]", izq, CImedio.NombreCompleto, CImedio.CI,
-                                                   CImedio.TipoPaciente, CImedio.FechaIngreso);
+                    Console.WriteLine("\t Paciente encontrado en  posicion de lista  {5} ,posicion de lista enlazada {0} : [{1}, {2}, {3}, {4}]", medio, CImedio.NombreCompleto, CImedio.CI,
+                                                   CImedio.TipoPaciente, CImedio.FechaIngreso,indice);
 
 
                 }
                 else if (CImedio.CI < target)
                 {
-                    BusquedaBinaria( target, medio + 1, der,patient);
+                    BusquedaBinaria( target, medio + 1, der,patient,indice);
                 }
                 else if (CImedio.CI > target)
                 {
-                    BusquedaBinaria( target, izq, medio - 1,patient);
+                    BusquedaBinaria( target, izq, medio - 1,patient,indice);
                 }
             }
             else
@@ -316,17 +307,17 @@ namespace HashTableProject
                 Patient CIder = getPatient(patient, der);
                 if (CIizq.CI == target)
                 {
-                    Console.WriteLine("\t Paciente encontrado en  {0} : [{1}, {2}, {3}, {4}]", izq, CIizq.NombreCompleto, CIizq.CI,
-                           CIizq.TipoPaciente, CIizq.FechaIngreso);
+                    Console.WriteLine("\t Paciente encontrado en  posicion de lista  {5} ,posicion de lista enlazada {0} : [{1}, {2}, {3}, {4}]", izq, CIizq.NombreCompleto, CIizq.CI,
+                                                  CIizq.TipoPaciente, CIizq.FechaIngreso, indice);
                     delCI = CIizq.CI;
                     delName = CIizq.NombreCompleto;
                 }
                 else if (CIder.CI== target)
                 {
-                    Console.WriteLine("\t Paciente encontrado en  {0} : [{1}, {2}, {3}, {4}]", der, CIder.NombreCompleto, CIder.CI,
-                           CIder.TipoPaciente, CIder.FechaIngreso);
-                    delCI = CIizq.CI;
-                    delName = CIizq.NombreCompleto;
+                    Console.WriteLine("\t Paciente encontrado en  posicion de lista  {5} ,posicion de lista enlazada {0} : [{1}, {2}, {3}, {4}]", der, CIder.NombreCompleto, CIder.CI,
+                                                  CIder.TipoPaciente, CIder.FechaIngreso, indice);
+                    delCI = CIder.CI;
+                    delName = CIder.NombreCompleto;
                 }
                 else
                 {
