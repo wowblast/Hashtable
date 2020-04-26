@@ -111,7 +111,7 @@ namespace HashTableProject
                                 BuscarporNombreCompleto(nombreCompleto);
                                 sw.Stop();
                                 Console.WriteLine(" tomó {0:N0}", sw.ElapsedTicks);
-                                sw.Reset(); break;
+                                sw.Reset();
                                 break;
                             default:
                                 break;
