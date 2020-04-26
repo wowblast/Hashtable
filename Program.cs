@@ -26,19 +26,21 @@ namespace HashTableProject
                 tablaNombre[i] = null;
             }
 
-            InsertarPacientePorNombre("Pepega Pls", 21, "Internado", "Martes 4/4/2020");
-            InsertarPacientePorNombre("Pepega Shower", 2566, "Internado", "Jueves 2/5/2020");
-            InsertarPacientePorNombre("Pepega Driving", 4261, "Internado", "Jueves 2/5/2020");
-            InsertarPacientePorNombre("Wide Peepo Sad", 3333, "Internado", "Jueves 2/5/2020");
-            InsertarPacientePorNombre("Pepe Hands", 2118, "Internado", "Jueves 2/5/2020");
-            InsertarPacientePorNombre("Monka Eyes", 1792, "Internado", "Jueves 2/5/2020");
-            InsertarPacientePorNombre("Pepe Laugh", 1500, "Internado", "Jueves 2/5/2020");
-            InsertarPacientePorNombre("XQC L", 2991, "Internado", "Jueves 2/5/2020");
+            InsertarPacientePorCI("Pepega Pls", 3333, "Internado", "Martes 4/4/2020");
+            InsertarPacientePorCI("Pepega Shower", 2566, "Internado", "Jueves 2/5/2020");
+            InsertarPacientePorCI("Pepega Driving", 4261, "Internado", "Jueves 2/5/2020");
+            InsertarPacientePorCI("Wide Peepo Sad", 21, "Internado", "Jueves 2/5/2020");
+            InsertarPacientePorCI("Pepe Hands", 2118, "Internado", "Jueves 2/5/2020");
+            InsertarPacientePorCI("Monka Eyes", 1792, "Internado", "Miercoles 30/12/2020");
+            InsertarPacientePorCI("Pepe Laugh", 1500, "Internado", "Jueves 2/5/2020");
+            InsertarPacientePorCI("XQC L", 2991, "Internado", "Jueves 2/5/2020");
 
-            MostrarPorNombre();
 
-            EliminarPacientePorNombre("Pepega Pls");
-            MostrarPorNombre();
+
+            MostrarPorCI();
+
+            //EliminarPacientePorNombre("Pepega Pls");
+            //MostrarPorNombre();
 
 
             Console.ReadLine();
@@ -56,6 +58,10 @@ namespace HashTableProject
             {
                 pat.Next = tablaCI[hash].Next;
                 tablaCI[hash].Next = pat;
+                Patient cola = getLastPatient(tablaCI[hash]);
+                Console.WriteLine("elemento ultimo {0}, {1}", cola.CI, cola.NombreCompleto);
+
+                quickSort(tablaCI[hash], cola);
                 return;
             }
             else
@@ -64,6 +70,7 @@ namespace HashTableProject
                 colasCI[hash] = pat;
                 return;
             }
+            
         }
         public static void showPatients(Patient first)
         {
@@ -213,6 +220,87 @@ namespace HashTableProject
             {
                 Console.WriteLine("Paciente no encontrado.");
             }
+        }
+        public static Patient Partition(Patient left, Patient right) 
+        {
+
+            if (left == right || left == null || right == null) 
+            {
+                return left;
+            }
+            Patient i = left;
+            Patient j = left;
+            string nombrePiv = right.NombreCompleto;
+            int piv = right.CI;
+            string tipoPiv = right.TipoPaciente;
+            string fechaPiv = right.FechaIngreso;
+            while (left != right && left != null)          
+            {
+                if (left.CI < piv)
+                {
+                    i = j;
+                    string tmpNombre = j.NombreCompleto;
+                    int tmpCI = j.CI;
+                    string tmpTipo = j.TipoPaciente;
+                    string tmpFecha = j.FechaIngreso;
+                    j.NombreCompleto = left.NombreCompleto;
+                    j.CI = left.CI;
+                    j.TipoPaciente = left.TipoPaciente;
+                    j.FechaIngreso = left.FechaIngreso;
+                    left.NombreCompleto = tmpNombre;
+                    left.CI = tmpCI;
+                    left.TipoPaciente = tmpTipo;
+                    left.FechaIngreso = tmpFecha;
+                    j = j.Next;
+                }
+                left = left.Next;
+            }
+            if (left != null)                                
+            {
+                string tmpNombre = j.NombreCompleto;
+                int tmpCI = j.CI;
+                string tmpTipo = j.TipoPaciente;
+                string tmpFecha = j.FechaIngreso;
+                j.NombreCompleto = nombrePiv;
+                j.CI = piv;
+                j.TipoPaciente = tipoPiv;
+                j.FechaIngreso = fechaPiv;
+                right.NombreCompleto = tmpNombre;
+                right.CI = tmpCI;
+                right.TipoPaciente = tmpTipo;
+                right.FechaIngreso = tmpFecha;
+            }
+            return i;
+        }
+
+        public static void quickSort(Patient first, Patient last)
+        {
+            if (first == last)
+            {
+                return;
+            }
+
+            Patient pivotNode = Partition(first, last);
+            quickSort(first, pivotNode);
+            Patient current = pivotNode;
+
+            if (pivotNode != null && pivotNode == first)
+            {
+                quickSort(pivotNode.Next, last);
+            }
+            else if (pivotNode != null && pivotNode.Next != null)
+            {
+                quickSort(pivotNode.Next.Next, last);
+            }
+        }
+        public static Patient getLastPatient(Patient p)
+        {
+            Patient temp = p;
+            while (temp.Next != null)
+            {
+                temp = temp.Next;
+            }
+            return temp;
         }
     }
 }
