@@ -289,8 +289,6 @@ namespace HashTableProject
                 {
                     Console.WriteLine("\t Paciente encontrado en  posicion de lista  {5} ,posicion de lista enlazada {0} : [{1}, {2}, {3}, {4}]", medio, CImedio.NombreCompleto, CImedio.CI,
                                                    CImedio.TipoPaciente, CImedio.FechaIngreso,indice);
-
-
                 }
                 else if (CImedio.CI < target)
                 {
