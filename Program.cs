@@ -13,12 +13,12 @@ namespace HashTableProject
 
 		static void Main(string[] args)
 		{
-            /*tablaCI = new Patient[cantidad];
+            tablaCI = new Patient[cantidad];
             colasCI = new Patient[cantidad];
             for (int i = 0; i < cantidad; i++)
             {
                 tablaCI[i] = null;
-            }*/
+            }
             tablaNombre = new Patient[cantidad];
             colasNombre = new Patient[cantidad];
             for (int i = 0; i < cantidad; i++)
@@ -26,7 +26,7 @@ namespace HashTableProject
                 tablaNombre[i] = null;
             }
 
-            InsertarPacientePorNombre("Pepega Pls", 1001, "Internado", "Martes 4/4/2020");
+            InsertarPacientePorNombre("Pepega Pls", 21, "Internado", "Martes 4/4/2020");
             InsertarPacientePorNombre("Pepega Shower", 2566, "Internado", "Jueves 2/5/2020");
             InsertarPacientePorNombre("Pepega Driving", 4261, "Internado", "Jueves 2/5/2020");
             InsertarPacientePorNombre("Wide Peepo Sad", 3333, "Internado", "Jueves 2/5/2020");
@@ -36,6 +36,10 @@ namespace HashTableProject
             InsertarPacientePorNombre("XQC L", 2991, "Internado", "Jueves 2/5/2020");
 
             MostrarPorNombre();
+
+            EliminarPacientePorNombre("Pepega Pls");
+            MostrarPorNombre();
+
 
             Console.ReadLine();
         }
@@ -71,7 +75,7 @@ namespace HashTableProject
             Patient current = null;
             for (int n = 0; n < cantidad; n++)
             {
-                current = colasCI[n];
+                current = tablaCI[n];
                 Console.WriteLine("{0} ", n);
                 if (current == null)
                 {
@@ -115,7 +119,7 @@ namespace HashTableProject
             Patient current = null;
             for (int n = 0; n < cantidad; n++)
             {
-                current = colasNombre[n];
+                current = tablaNombre[n];
                 Console.WriteLine("{0} ", n);
                 if (current == null)
                 {
@@ -130,6 +134,84 @@ namespace HashTableProject
                         current = current.Next;
                     }
                 }
+            }
+        }
+        public static void EliminarPacientePorCI(int ci)
+        {
+            int hash = ci % cantidad;
+            while (tablaCI[hash] != null && tablaCI[hash].CI % cantidad != ci % cantidad)
+            {
+                hash = (hash + 1) % cantidad;
+            }
+            Patient current = tablaCI[hash];
+            bool removido = false;
+            while (current != null)
+            {
+                if (current.CI == ci)
+                {
+                    tablaCI[hash] = current.Next;
+                    Console.WriteLine("Paciente {0}, CI: {1} Eliminado.", current.NombreCompleto, current.CI);
+                    removido = true;
+                    break;
+                }
+                if (current.Next != null)
+                {
+                    if (current.Next.CI == ci)
+                    {
+                        Console.WriteLine("Paciente {0}, CI: {1} Eliminado.", current.Next.NombreCompleto, current.Next.CI);
+                        Patient next = current.Next.Next;
+                        current.Next = next;
+                        removido = true;
+                        break;
+                    }
+                    else
+                    {
+                        current = current.Next;
+                    }
+                }
+            }
+            if (!removido)
+            {
+                Console.WriteLine("Paciente no encontrado.");
+            }
+        }
+        public static void EliminarPacientePorNombre(string nombre)
+        {
+            int hash = nombre.Length % cantidad;
+            while (tablaNombre[hash] != null && tablaNombre[hash].NombreCompleto.Length % cantidad != nombre.Length % cantidad)
+            {
+                hash = (hash + 1) % cantidad;
+            }
+            Patient current = tablaNombre[hash];
+            bool removido = false;
+            while (current != null)
+            {
+                if (current.NombreCompleto == nombre)
+                {
+                    tablaNombre[hash] = current.Next;
+                    Console.WriteLine("Paciente {0}, CI: {1} Eliminado.", current.NombreCompleto, current.CI);
+                    removido = true;
+                    break;
+                }
+                if (current.Next != null)
+                {
+                    if (current.Next.NombreCompleto == nombre)
+                    {
+                        Console.WriteLine("Paciente {0}, CI: {1} Eliminado.", current.Next.NombreCompleto, current.Next.CI);
+                        Patient next = current.Next.Next;
+                        current.Next = next;
+                        removido = true;
+                        break;
+                    }
+                    else
+                    {
+                        current = current.Next;
+                    }
+                }
+            }
+            if (!removido)
+            {
+                Console.WriteLine("Paciente no encontrado.");
             }
         }
     }
